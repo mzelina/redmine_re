@@ -94,14 +94,14 @@ class ReQueriesController < RedmineReController
       sql << " AND artifact_type IN (?)" unless params[:only_types].blank?
       sql << " AND artifact_type NOT IN (?)" unless params[:except_types].blank?
 
-      conditions = [sql, "%#{params[:query]}%"]
+      conditions = ["%#{params[:query]}%"]
       conditions << params[:except_ids] unless params[:except_ids].blank?
       conditions << params[:only_types] unless params[:only_types].blank?
       conditions << params[:except_types] unless params[:except_types].blank?
 
       artifacts = ReArtifactProperties.of_project(@project).without_projects
-      artifacts = artifacts.all(:conditions => conditions, :order => 'name ASC')
-      artifacts.map! do |artifact|
+      artifacts = artifacts.where(sql, *conditions).order('name ASC')
+      artifacts.map do |artifact|
         artifact_to_json(artifact).merge({:highlighted_name => highlight_letters(artifact.name, params[:query])})
       end
     end    
@@ -114,11 +114,11 @@ class ReQueriesController < RedmineReController
       sql = "project_id = ? AND subject LIKE ?"
       sql << " AND id NOT IN (?)" unless params[:except_ids].blank?
 
-      conditions = [sql, @project.id, "%#{params[:query]}%"]
+      conditions = [@project.id, "%#{params[:query]}%"]
       conditions << params[:except_ids] unless params[:except_ids].blank?
 
-      issues = Issue.all(:conditions => conditions, :order => 'subject ASC')
-      issues.map! do |issue|
+      issues = Issue.where(sql, *conditions).order('subject ASC')
+      issues.map do |issue|
         issue_to_json(issue).merge({:highlighted_name => highlight_letters(issue.subject, params[:query])})
       end
     end
@@ -131,11 +131,11 @@ class ReQueriesController < RedmineReController
       sql = "project_id = ? AND name LIKE ?"
       sql << " AND id NOT IN (?)" unless params[:except_ids].blank?
 
-      conditions = [sql, @project.id, "%#{params[:query]}%"]
+      conditions = [@project.id, "%#{params[:query]}%"]
       conditions << params[:except_ids] unless params[:except_ids].blank?
 
-      diagrams = ConcreteDiagram.all(:conditions => conditions, :order => 'name ASC')
-      diagrams.map! do |diagram|
+      diagrams = ConcreteDiagram.where(sql, *conditions).order('name ASC')
+      diagrams.map do |diagram|
         diagram_to_json(diagram).merge({:highlighted_name => highlight_letters(diagram.name, params[:query])})
       end
     end
@@ -149,11 +149,11 @@ class ReQueriesController < RedmineReController
       sql << " AND id NOT IN (?)" unless params[:except_ids].blank?
 
       preformatted_query = "%#{params[:query]}%"
-      conditions = [sql, User::STATUS_ACTIVE, preformatted_query, preformatted_query, preformatted_query]
+      conditions = [User::STATUS_ACTIVE, preformatted_query, preformatted_query, preformatted_query]
       conditions << params[:except_ids] unless params[:except_ids].blank?
 
-      users = User.all(:conditions => conditions, :order => 'lastname ASC, firstname ASC, login ASC')
-      users.map! do |user|
+      users = User.where(sql, *conditions).order('lastname ASC, firstname ASC, login ASC')
+      users.map do |user|
         full_name = "#{user.firstname} #{user.lastname}"
         user_to_json(user).merge({:highlighted_full_name => highlight_letters(full_name, params[:query]),
                                   :highlighted_login => highlight_letters(user.login, params[:query])})
@@ -168,25 +168,25 @@ class ReQueriesController < RedmineReController
 
   def artifacts_bits
     artifacts = ReArtifactProperties.of_project(@project).without_projects.find(params[:ids], :order => 'name ASC')
-    artifacts.map! { |artifact| artifact_to_json(artifact) }
+    artifacts.map { |artifact| artifact_to_json(artifact) }
     render :json => artifacts
   end
 
   def issues_bits
-    issues = Issue.find(params[:ids], :conditions => { :project_id => @project.id }, :order => 'subject ASC')
-    issues.map! { |issue| issue_to_json(issue) }
+    issues = Issue.where('id IN (?) AND project_id=?', params[:ids], @project.id).order('subject ASC')
+    issues.map { |issue| issue_to_json(issue) }
     render :json => issues
   end
 
   def diagrams_bits
-    diagrams = ConcreteDiagram.find(params[:ids], :conditions => { :project_id => @project.id }, :order => 'name ASC')
-    diagrams.map! { |diagram| diagram_to_json(diagram) }
+    diagrams = ConcreteDiagram.where('id IN (?) AND project_id=?', params[:ids], @project.id).order('name ASC')
+    diagrams.map { |diagram| diagram_to_json(diagram) }
     render :json => diagrams
   end
 
   def users_bits
-    users = User.find(params[:ids], :order => 'firstname ASC, lastname ASC, login ASC')
-    users.map! { |user| user_to_json(user) }
+    users = User.where('id IN (?)', params[:ids]).order('firstname ASC, lastname ASC, login ASC')
+    users.map { |user| user_to_json(user) }
     render :json => users
   end
 
@@ -203,8 +203,7 @@ class ReQueriesController < RedmineReController
     @artifact_types = @project_artifacts.available_artifact_types
     @relation_types = ReRelationtype.relation_types(@project.id, false)
     @issues = []
-    @users = User.all(:conditions => ['status = ?', User::STATUS_ACTIVE],
-                      :order => 'firstname ASC, lastname ASC, login ASC')
+    @users = User.where('status = ?', User::STATUS_ACTIVE).order('firstname ASC, lastname ASC, login ASC')
     @roles = Role.builtin(false).all(:order => 'name ASC')
     
     if User.current.admin?
@@ -222,7 +221,7 @@ class ReQueriesController < RedmineReController
   end
 
   def load_cropped_collections
-    return unless @query
+    (return unless @query
       
     source_artifact_ids = [@query[:source][:ids]].flatten
     sink_artifact_ids = [@query[:sink][:ids]].flatten
@@ -231,7 +230,7 @@ class ReQueriesController < RedmineReController
     @artifacts = (artifact_ids.empty?) ? [] : @project_artifacts.find(artifact_ids)
 
     issue_ids = [@query[:issue][:ids]].concat([@query[:issue][:ids_include]]).concat([@query[:issue][:ids_exclude]]).flatten.compact
-    @issues = (issue_ids.empty?) ? [] : Issue.find(issue_ids, :conditions => { :project_id => @project.id })
+    @issues = (issue_ids.empty?) ? [] : Issue.where('id IN (?) and project_id=?', issue_ids, @project.id))
   end
 
   def highlight_letters(str, query)
