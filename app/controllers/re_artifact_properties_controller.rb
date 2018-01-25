@@ -26,7 +26,7 @@ class ReArtifactPropertiesController < RedmineReController
       logger.debug("#{@re_artifact_properties.artifact.class} does not implement new hook")
     end    
     @secondary_user_profiles = []
-    @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
+    @user_profiles = ReArtifactProperties.where("artifact_type=? AND project_id=?",'ReUserProfile', @project.id)
 
     unless params[:sibling_artifact_id].blank?
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
@@ -147,12 +147,14 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def retrieve_previous_and_next_sibling_ids
-    position_id = Hash[@re_artifact_properties.parent.child_relations.collect { |s| [s.position, s.sink_id] }]
-    my_position = @re_artifact_properties.position
-    @artifact_count = position_id.size
-    position_id.each_key do |pos| # ruby >= 1.9.2 uses a sorted hash such that the following works
-      @previous_re_artifact_properties_id = position_id[pos] unless pos >= my_position
-      @next_re_artifact_properties_id ||= position_id[pos] if pos > my_position
+    if @re_artifact_properties.parent then
+      position_id = Hash[@re_artifact_properties.parent.child_relations.collect { |s| [s.position, s.sink_id] }]
+      my_position = @re_artifact_properties.position
+      @artifact_count = position_id.size
+      position_id.each_key do |pos| # ruby >= 1.9.2 uses a sorted hash such that the following works
+        @previous_re_artifact_properties_id = position_id[pos] unless pos >= my_position
+        @next_re_artifact_properties_id ||= position_id[pos] if pos > my_position
+      end
     end
   end
 
@@ -164,7 +166,8 @@ class ReArtifactPropertiesController < RedmineReController
         
     if @project.enabled_module_names.include? 'diagrameditor'
       @relation_to_diagrams = ReArtifactRelationship.find_by_source_id_and_relation_type(@re_artifact_properties.id, 'diagram') 
-      @related_diagrams = ConcreteDiagram.find_all_by_id(@relation_to_diagrams.sink_id) unless @relation_to_diagrams.nil?           
+      @related_diagrams = ReArtifactProperties.related_diagrams.where("id=?", @relation_to_diagrams.sink_id) unless @relation_to_diagrams.nil?           
+      # @related_diagrams = ConcreteDiagram.where("id=?", @relation_to_diagrams.sink_id) unless @relation_to_diagrams.nil?           
     end
 
     begin

@@ -87,11 +87,14 @@ class ReSetting < ActiveRecord::Base
   end
   
   def self.generate_active_settings_hash(order, project_id)
-    active_settings = {}
+    active_settings = Hash.new # {}
     unless order.nil?
       order.each do |s|
         setting = self.get_serialized(s, project_id)
-        active_settings[s] = setting if setting["in_use"]
+	# logger.info "s=[[#{s}]] [[#{setting}]] [[#{active_settings}]]"
+        if setting then
+	  active_settings[s] = setting if setting["in_use"]
+	end
       end
     end
     active_settings

@@ -45,7 +45,8 @@ class AddNameAndPositionToSubtasks < ActiveRecord::Migration
       parent_relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(properties.id, "parentchild")
       parent_relation.destroy
     end
-    ReArtifactProperties.find_all_by_artifact_type("ReSubtask").each{ |p| ReArtifactProperties.delete(p.id) }
+    ReArtifactProperties.where("artifact_type=?", "ReSubtask").each{ |p| ReArtifactProperties.delete(p.id) }
+    # ReArtifactProperties.find_all_by_artifact_type("ReSubtask").each{ |p| ReArtifactProperties.delete(p.id) }
 
   end
 

@@ -52,16 +52,16 @@ class ReArtifactRelationship < ActiveRecord::Base
 
   def self.find_all_relations_for_artifact_id(artifact_id)
      relations = []
-     relations.concat(self.find_all_by_source_id(artifact_id))
-     relations.concat(self.find_all_by_sink_id(artifact_id))
+     relations.concat(self.where("source_id=?", artifact_id))
+     relations.concat(self.where("sink_id=?", artifact_id))
      relations.uniq
   end
   
   def scope_condition()
     # define a seperate list for each source id and relation type
-    "#{connection.quote_column_name("source_id")} = #{quote_value(self.source_id)}
+    "#{self.class.connection.quote_column_name("source_id")} = #{self.source_id}
      AND
-     #{connection.quote_column_name("relation_type")} = #{quote_value(self.relation_type)}"
+     #{self.class.connection.quote_column_name("relation_type")} = #{self.relation_type}"
   end
 
   def check_relation_types
