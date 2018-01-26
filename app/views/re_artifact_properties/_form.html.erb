@@ -16,6 +16,8 @@
           <%= f.hidden_field :artifact_type %>
           <%= f.hidden_field :project_id %>
       <% else %>
+          <%= hidden_field_tag :parent_artifact_id, @parent_artifact_id %>
+          <%= hidden_field_tag :parent_relation_position, @parent_relation_position %>
           <%= hidden_field_tag(:id, @re_artifact_properties.id) %>
       <% end %>
 

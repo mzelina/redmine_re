@@ -10,7 +10,7 @@ class ReRelationtype < ActiveRecord::Base
   #validates :is_directed, :inclusion => { :in => [true, false] }
   #validates :in_use, :inclusion => { :in => [true, false] }
   
-  def self.relation_types (project_id, is_system_relation=nil, is_used_relation=nil)
+  def self.relation_types(project_id, is_system_relation=nil, is_used_relation=nil)
     relation_types = []
     tmp = nil
     if is_system_relation == nil
@@ -33,7 +33,7 @@ class ReRelationtype < ActiveRecord::Base
   end
   
     
-  def self.in_use (relation_type, project_id)
+  def self.in_use(relation_type, project_id)
 
     ret = false
     tmp = ReRelationtype.find_by_project_id_and_relation_type_and_in_use(project_id, relation_type, 1)
@@ -43,7 +43,7 @@ class ReRelationtype < ActiveRecord::Base
     ret
   end
     
-  def self.get_alias_name (relation_type, project_id)
+  def self.get_alias_name(relation_type, project_id)
 
     ret = ""
     tmp = ReRelationtype.find_by_project_id_and_relation_type(project_id, relation_type)

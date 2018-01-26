@@ -1,4 +1,13 @@
-Project.create("description"=>"", "homepage"=>"", "identifier"=>"test", "is_public"=>true, "name"=>"Testproject", "parent_id"=>nil)
+Project.delete_all
+ReArtifactProperties.delete_all
+ReArtifactRelationship.delete_all
+
+ActiveRecord::Base.connection.execute("delete from sqlite_sequence where name='projects';")
+ActiveRecord::Base.connection.execute("delete from sqlite_sequence where name='re_artifact_properties';")
+ActiveRecord::Base.connection.execute("delete from sqlite_sequence where name='re_artifact_relationships';")
+
+
+p = Project.create("description"=>"", "homepage"=>"", "identifier"=>"test", "is_public"=>true, "name"=>"Testproject", "parent_id"=>nil)
 EnabledModule.create("name"=>"issue_tracking", "project_id"=>1)
 EnabledModule.create("name"=>"time_tracking", "project_id"=>1)
 EnabledModule.create("name"=>"news", "project_id"=>1)
@@ -10,22 +19,38 @@ EnabledModule.create("name"=>"boards", "project_id"=>1)
 EnabledModule.create("name"=>"calendar", "project_id"=>1)
 EnabledModule.create("name"=>"gantt", "project_id"=>1)
 EnabledModule.create("name"=>"requirements", "project_id"=>1)
+
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>2, "source_id"=>1)
+ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>3, "source_id"=>1)
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>4, "source_id"=>2)
+ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>5, "source_id"=>2)
+ReArtifactRelationship.create("position"=>4, "relation_type"=>"parentchild", "sink_id"=>6, "source_id"=>2)
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>7, "source_id"=>3)
+ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>8, "source_id"=>3)
+ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>9, "source_id"=>1)
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>10, "source_id"=>9)
+ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>11, "source_id"=>9)
+
 ReArtifactProperties.create("artifact_id"=>1, "artifact_type"=>"Project", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Testproject", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1)
-ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReSection", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Chapter 1", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
-"parent" => ReArtifactProperties.find(1),
-"parent_relation" => ReArtifactRelationship.find_by_sink_id(2))
+
+ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReSection", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Chapter 1", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1, "parent" => ReArtifactProperties.find(1), "parent_relation" => ReArtifactRelationship.find_by_sink_id(2))
+
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReSection", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Chapter 2", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(1),
 "parent_relation" => ReArtifactRelationship.find_by_sink_id(3))
+
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReRequirement", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Requirement 1.1", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(2),
 "parent_relation" => ReArtifactRelationship.find_by_sink_id(4))
+
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReRequirement", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Requirement 1.2", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(2),
 "parent_relation" => ReArtifactRelationship.find_by_sink_id(5))
+
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReRequirement", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Requirement 1.3", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(2),
 "parent_relation" => ReArtifactRelationship.find_by_sink_id(6))
+
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReGoal", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Goal 2.1", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(3),
 "parent_relation" => ReArtifactRelationship.find_by_sink_id(7))
@@ -41,6 +66,7 @@ ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReUserProfile"
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReUserProfile", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Userprofil 3.2", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(9),
 "parent_relation" => ReArtifactRelationship.find_by_sink_id(11))
+
 ReSetting.create("name"=>"artifact_order", "project_id"=>1, "value"=>"[\"re_vision\",\"re_workarea\",\"re_processword\",\"re_rationale\",\"re_requirement\",\"re_scenario\",\"re_task\",\"re_goal\",\"re_attachment\",\"re_section\",\"re_use_case\",\"re_user_profile\"]")
 ReSetting.create("name"=>"re_vision", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Vision\",\"color\":\"#00ff00\",\"printable\":false}")
 ReSetting.create("name"=>"re_workarea", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Workarea\",\"color\":\"#993300\",\"printable\":false}")
@@ -69,13 +95,5 @@ ReSetting.create("name"=>"plugin_description", "project_id"=>1, "value"=>"")
 ReSetting.create("name"=>"relation_order", "project_id"=>1, "value"=>"[\"dependency\",\"conflict\",\"rationale\",\"refinement\",\"part_of\",\"parentchild\",\"primary_actor\",\"actors\",\"diagram\"]")
 ReSetting.create("name"=>"unconfirmed", "project_id"=>1, "value"=>"false")
 ReSetting.create("name"=>"export_format", "project_id"=>1, "value"=>"disabled")
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>2, "source_id"=>1)
-ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>3, "source_id"=>1)
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>4, "source_id"=>2)
-ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>5, "source_id"=>2)
-ReArtifactRelationship.create("position"=>4, "relation_type"=>"parentchild", "sink_id"=>6, "source_id"=>2)
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>7, "source_id"=>3)
-ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>8, "source_id"=>3)
-ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>9, "source_id"=>1)
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>10, "source_id"=>9)
-ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>11, "source_id"=>9)
+
+

@@ -50,7 +50,7 @@ class RequirementsControllerTest < ActionController::TestCase
     
     # Simulate a POST response with the given HTTP parameters. 
     post("delegate_tree_drop", 
-      { :sibling_id => 8, 
+      { :parent_id => 8, 
         :id => 11, # Artifact_moved_id
         :position => "inside" 
       }

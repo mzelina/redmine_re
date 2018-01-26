@@ -221,7 +221,7 @@ class ReQueriesController < RedmineReController
   end
 
   def load_cropped_collections
-    (return unless @query
+    return unless @query
       
     source_artifact_ids = [@query[:source][:ids]].flatten
     sink_artifact_ids = [@query[:sink][:ids]].flatten
@@ -230,7 +230,7 @@ class ReQueriesController < RedmineReController
     @artifacts = (artifact_ids.empty?) ? [] : @project_artifacts.find(artifact_ids)
 
     issue_ids = [@query[:issue][:ids]].concat([@query[:issue][:ids_include]]).concat([@query[:issue][:ids_exclude]]).flatten.compact
-    @issues = (issue_ids.empty?) ? [] : Issue.where('id IN (?) and project_id=?', issue_ids, @project.id))
+    @issues = (issue_ids.empty?) ? [] : Issue.where('id IN (?) and project_id=?', issue_ids, @project.id)
   end
 
   def highlight_letters(str, query)

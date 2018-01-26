@@ -167,6 +167,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
   def build_artifact properties, something_we_dont_know_yet
     # is build_artifact only called when the re_artifact is new?
+    logger.debug "build_artifact"
     logger.debug properties.inspect
     # properties.re_subtask => properties.re_subtask_attributes or properties_re_subtasks_attributes 
 

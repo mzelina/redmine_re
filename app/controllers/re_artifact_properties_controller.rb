@@ -29,6 +29,7 @@ class ReArtifactPropertiesController < RedmineReController
     @user_profiles = ReArtifactProperties.where("artifact_type=? AND project_id=?",'ReUserProfile', @project.id)
 
     unless params[:sibling_artifact_id].blank?
+      logger.info("sibling_artifact_id = #{params[:sibling_artifact_id]}")
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
       begin
         @parent_artifact_id = sibling.parent.id

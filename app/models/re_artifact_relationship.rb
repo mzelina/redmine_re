@@ -61,7 +61,7 @@ class ReArtifactRelationship < ActiveRecord::Base
     # define a seperate list for each source id and relation type
     "#{self.class.connection.quote_column_name("source_id")} = #{self.source_id}
      AND
-     #{self.class.connection.quote_column_name("relation_type")} = #{self.relation_type}"
+     #{self.class.connection.quote_column_name("relation_type")} = '#{self.relation_type}'"
   end
 
   def check_relation_types
