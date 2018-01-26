@@ -295,6 +295,7 @@ class ReArtifactPropertiesController < RedmineReController
         # content contains relation_type
         unless content['relation_type'].blank?
           content['relation_type'].each do |relationtype|
+            logger.info("handle_relations_for_new_artifact")
             new_relation = ReArtifactRelationship.new(:source_id => new_source_artifact_id, :sink_id => id, :relation_type => relationtype)
             new_relation.save
           end

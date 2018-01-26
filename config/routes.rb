@@ -35,8 +35,8 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/artifact/new_comment/:id' => 're_artifact_properties#new_comment', via: [:get, :post]
 
   match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete', via: [:get, :post]
-  match 'projects/:project_id/ralation/prepare/:id' => 're_artifact_relationship_controller#prepare_relationships', via: [:get, :post]
-  match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink', via: [:get, :post]
+  match 'projects/:project_id/relation/prepare/:id' => 're_artifact_relationship_controller#prepare_relationships', via: [:get, :post]
+  match 'projects/:project_id/relation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink', via: [:get, :post]
   match '/relation/add' => 'requirements#add_relation', via: [:get, :post]
 
   match 'projects/:project_id/re_queries' => 're_queries#index', :via => :get

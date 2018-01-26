@@ -1,6 +1,6 @@
 module RequirementsHelper
 
-  def context_menu_link_remote (name, url, update, options={})
+  def context_menu_link_remote(name, url, update, options={})
     # This helper creates an remote link for a context-menu
     # Params: name    This String is written on the html page as the link
     #         url     A hash with information about action, controller and parameters
