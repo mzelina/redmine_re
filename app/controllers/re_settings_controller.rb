@@ -165,7 +165,7 @@ private
           r.relation_type = v[:alias_name] # on i the type was created the alias name will be set
           r.is_system_relation = 0
         else
-          r = ReRelationtype.find_or_create_by_id(v['id'])
+          r = ReRelationtype.find_or_create_by(id: v['id'])
         end
         
         if r.is_system_relation == 0

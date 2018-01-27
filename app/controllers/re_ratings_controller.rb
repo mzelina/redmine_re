@@ -1,7 +1,7 @@
 class ReRatingsController < ApplicationController
   def create
     @rap = ReArtifactProperties.find_by_id(params[:re_artifact_properties_id])
-    @rating = ReRating.find_or_create_by_re_artifact_properties_id(params[:re_artifact_properties_id])
+    @rating = ReRating.find_or_create_by(re_artifact_properties_id: params[:re_artifact_properties_id])
     @rating.value = params[:re_rating][:value]
     @rating.user_id = User.current.id
 

@@ -13,6 +13,7 @@
   <%= hidden_field_tag('re_artifact_properties_id', re_rating.re_artifact_properties_id) %>
   <%= f.submit :Submit %>
   <% end %>
-  <div class="average_rating">&oslash;&nbsp;<!-- %= re_rating.re_artifact_properties.average_rating % --></div>
+  <div class="average_rating">&oslash;&nbsp;<% if re_rating && re_rating.re_artifact_properties then %>
+    <%= re_rating.re_artifact_properties.average_rating %><% end %></div>
 </div>
 <%= javascript_include_tag 'ratings.js', :plugin => 'redmine_re', :cache => true %>

@@ -270,6 +270,8 @@ $.layout.state = {
 				// reset autoResize
 				if (ar)
 					state.autoResize = ar;
+				c = false;
+				h = false;
 				// resize BEFORE opening
 				if (!open)
 					inst._sizePane(pane, s, false, false, false); // false=skipCallback/noAnimation/forceResize

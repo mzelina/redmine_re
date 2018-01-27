@@ -267,7 +267,9 @@ class ReArtifactProperties < ActiveRecord::Base
     @value = 0.to_f
     unless self.re_ratings.empty?
       self.re_ratings.each do |rating|
-        @value = @value + rating.value
+        if rating.value.nil? == false then
+          @value = @value + rating.value
+        end
       end
       @total = self.re_ratings.size
       @value = @value.to_f / @total.to_f

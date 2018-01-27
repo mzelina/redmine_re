@@ -2351,11 +2351,11 @@ $.fn.layout = function (opts) {
 		}
 
 		// close or hide the pane if specified in settings
-		if (o.initClosed && o.closable && !o.initHidden)
+		/* if (o.initClosed && o.closable && !o.initHidden)
 			close(pane, true, true); // true, true = force, noAnimation
 		else if (o.initHidden || o.initClosed)
 			hide(pane); // will be completely invisible - no resizer or spacing
-		else if (!s.noRoom)
+		else if (!s.noRoom) */
 			// make the pane visible - in case was initially hidden
 			$P.css("display","block");
 		// ELSE setAsOpen() - called later by initHandles()
