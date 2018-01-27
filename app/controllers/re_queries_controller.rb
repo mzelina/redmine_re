@@ -11,8 +11,9 @@ class ReQueriesController < RedmineReController
     @query.project = @project
     load_cropped_collections
     initialize_tree_data
+    logger.warn @query.conditions
     if @query.set_by_params?
-      @found_artifacts = ReArtifactProperties.all(:conditions => @query.conditions, :order => @query.order_string)
+      @found_artifacts = ReArtifactProperties.where(*(@query.conditions).order(@query.order_string)
     else
       @found_artifacts = []
     end
@@ -25,7 +26,8 @@ class ReQueriesController < RedmineReController
     initialize_tree_data
     load_cropped_collections
 
-    @found_artifacts = ReArtifactProperties.all(:conditions => @query.conditions, :order => @query.order_string)
+    logger.warn @query.conditions
+    @found_artifacts = ReArtifactProperties.where(*(@query.conditions).order(@query.order_string)
   end
 
   def apply
@@ -166,7 +168,7 @@ class ReQueriesController < RedmineReController
   ##
 
   def artifacts_bits
-    artifacts = ReArtifactProperties.of_project(@project).without_projects.find(params[:ids], :order => 'name ASC')
+    artifacts = ReArtifactProperties.of_project(@project).without_projects.find(params[:ids]).order('name ASC')
     artifacts.map { |artifact| artifact_to_json(artifact) }
     render :json => artifacts
   end
@@ -193,7 +195,7 @@ class ReQueriesController < RedmineReController
   private
 
   def load_visible_queries
-    @queries = ReQuery.visible.all(:order => 'name ASC')
+    @queries = ReQuery.visible.all.order('name ASC')
   end
 
   def load_selectable_collections
@@ -203,7 +205,7 @@ class ReQueriesController < RedmineReController
     @relation_types = ReRelationtype.relation_types(@project.id, false)
     @issues = []
     @users = User.where('status = ?', User::STATUS_ACTIVE).order('firstname ASC, lastname ASC, login ASC')
-    @roles = Role.builtin(false).all(:order => 'name ASC')
+    @roles = Role.builtin(false).all.order('name ASC')
     
     if User.current.admin?
       @visible_roles = @roles

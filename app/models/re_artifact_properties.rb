@@ -236,11 +236,15 @@ class ReArtifactProperties < ActiveRecord::Base
   end
 
   def self.available_artifact_types
-    all(:group => :artifact_type, :select => :artifact_type).collect(&:artifact_type)
+    all.collect(&:artifact_type).uniq
   end
 
   def position
-    return parent_relation.position
+    if parent_relation.nil? then
+      return nil
+    else 
+      return parent_relation.position
+    end
   end
 
   def gather_children

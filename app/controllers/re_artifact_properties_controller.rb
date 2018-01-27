@@ -393,8 +393,16 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-    @relationships_incoming.delete_if { |x| x.relation_type.eql? "parentchild" }
-    @relationships_outgoing.delete_if { |x| x.relation_type.eql? "parentchild" }
+    @relationships_incoming.each do |r|
+      if r.relation_type.eql? "parentchild" then
+        r.delete
+      end
+    end
+    @relationships_outgoing.each do |r|
+      if r.relation_type.eql? "parentchild" then
+        r.delete
+      end
+    end
   end
 
   def how_to_delete
@@ -407,17 +415,15 @@ class ReArtifactPropertiesController < RedmineReController
     @children = gather_children(@re_artifact_properties)
 
     @relationships_incoming.each do |r|
-      if r.eql? "parentchild" then
+      if r.relation_type.eql? "parentchild" then
         r.delete
       end
     end
     @relationships_outgoing.each do |r|
-      if r.eql? "parentchild" then
+      if r.relation_type.eql? "parentchild" then
         r.delete
       end
     end
-    # @relationships_incoming.delete_if { |x| x.relation_type.eql? "parentchild" }
-    # @relationships_outgoing.delete_if { |x| x.relation_type.eql? "parentchild" }
 
     initialize_tree_data
     

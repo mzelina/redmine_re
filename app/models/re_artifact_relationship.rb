@@ -36,7 +36,6 @@ class ReArtifactRelationship < ActiveRecord::Base
   validates :sink_id, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
   validates :sink, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" || rel.relation_type == "diagram" }
   validates :source_id, :presence => true
-  # validate :check_relation_types
 
   scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
@@ -66,8 +65,9 @@ class ReArtifactRelationship < ActiveRecord::Base
   end
 
   def check_relation_types
-    logger.info "check_relation_types #{self.relation_type}"
-    unless(ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(self.relation_type))
+    logger.warn "check_relation_types = #{self.relation_type}"
+    if false == ReRelationtype.all.collect(&:relation_type).include?(self.relation_type) then
+      logger.warn "check_relation_types changing from #{self.relation_type}"
       self.relation_type = "parentchild"
     end
     # TODO: :inclusion => { :in => ReRelationtype::gather_all_relation_types.values }
