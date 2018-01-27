@@ -9,7 +9,6 @@ module IssuePatch
 
     #typing in class
     base.class_eval do
-      unloadable
 
       #puts base.methods
       has_many :re_realizations, :dependent => :destroy

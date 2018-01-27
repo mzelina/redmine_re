@@ -5,7 +5,6 @@ module QueryPatch
   def self.included(base)
     base.send(:include, InstanceMethods)
     base.class_eval do
-      unloadable
 
       # Introduce new "Artifacts Count" column
       artifacts_count_col = QueryColumn.new(:re_artifacts_count, :caption => :re_linked_artifacts_count)

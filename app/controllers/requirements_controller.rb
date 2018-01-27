@@ -1,7 +1,6 @@
 include ReApplicationHelper
 
 class RequirementsController < RedmineReController
-  unloadable
   menu_item :re
 
   def index

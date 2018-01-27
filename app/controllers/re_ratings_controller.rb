@@ -1,6 +1,4 @@
 class ReRatingsController < ApplicationController
-  unloadable
-
   def create
     @rap = ReArtifactProperties.find_by_id(params[:re_artifact_properties_id])
     @rating = ReRating.find_or_create_by_re_artifact_properties_id(params[:re_artifact_properties_id])

@@ -1,5 +1,4 @@
 class ReSettingsController < RedmineReController
-  unloadable
   menu_item :re
 
   def configure

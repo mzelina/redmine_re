@@ -1,6 +1,4 @@
 class ReSubtask < ActiveRecord::Base
-  unloadable
-
   belongs_to :re_task, :inverse_of => :re_subtasks
 
   validates :re_task, :presence => true

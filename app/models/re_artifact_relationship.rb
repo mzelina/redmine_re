@@ -1,6 +1,7 @@
 class ReArtifactRelationship < ActiveRecord::Base
-  unloadable
   acts_as_list # see special scope condition below
+
+  before_save :check_relation_types
 
    SYSTEM_RELATION_TYPES = {
      :pch => "parentchild",
@@ -35,7 +36,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   validates :sink_id, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
   validates :sink, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" || rel.relation_type == "diagram" }
   validates :source_id, :presence => true
-  validate :check_relation_types
+  # validate :check_relation_types
 
   scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
@@ -65,6 +66,10 @@ class ReArtifactRelationship < ActiveRecord::Base
   end
 
   def check_relation_types
+    logger.info "check_relation_types #{self.relation_type}"
+    unless(ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(self.relation_type))
+      self.relation_type = "parentchild"
+    end
     # TODO: :inclusion => { :in => ReRelationtype::gather_all_relation_types.values }
     # errors.add(:relation_type, 'Undefined relation type')
   end

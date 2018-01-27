@@ -1,5 +1,4 @@
 class ReRequirement < ActiveRecord::Base
-  unloadable
 
   INITIAL_COLOR="#ffcc00"
   

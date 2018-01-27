@@ -1,5 +1,4 @@
 class ReGoal < ActiveRecord::Base
-  unloadable
 
   INITIAL_COLOR="#339966"
 

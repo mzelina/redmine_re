@@ -2,7 +2,6 @@
 # super controller for the redmine RE plugin
 # common methods used for (almost) all redmine_re controllers go here
 class RedmineReController < ApplicationController
-  unloadable
   menu_item :re
 
   NODE_CONTEXT_MENU_ICON = "bullet_toggle_plus.png"

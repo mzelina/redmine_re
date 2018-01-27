@@ -58,7 +58,7 @@
             this.addClass('artifact');
             this.attr('title', record.name);
             $('<span />', { 'class': 'icon ' + record.icon }).appendTo(this);
-            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.name);
             $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
         };
 
@@ -100,7 +100,7 @@
             this.addClass('issue');
             this.attr('title', record.subject);
             $('<span />', { 'class': 'id' }).appendTo(this).text('#' + record.id);
-            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.subject);
         };
 
         this.createBit = function(record) {
@@ -141,7 +141,7 @@
             this.addClass('diagram');
             this.attr('title', record.name);
             $('<span />', { 'class': 'id' }).appendTo(this).text('#' + record.id);
-            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.name);
         };
 
         this.createBit = function(record) {
@@ -180,7 +180,7 @@
         this.createSuggestion = function(record) {
             this.addClass('user');
             this.attr('title', record.full_name);
-            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_full_name);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.full_name);
             $('<span />', { 'class': 'login' }).appendTo(this).html(record.highlighted_login);
         };
 
@@ -221,7 +221,7 @@
             this.addClass('artifact');
             this.attr('title', record.name);
             $('<span />', { 'class': 'icon ' + record.icon }).appendTo(this);
-            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.name);
             $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
             this.click(function() {
                 document.location = record.url;
@@ -247,7 +247,7 @@
             this.addClass('artifact');
             this.attr('title', record.name);
             $('<span />', { 'class': 'icon ' + record.icon }).appendTo(this);
-            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.name);
             $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
             this.click(function() {
             	createRelation(record);
@@ -273,7 +273,7 @@
             this.addClass('artifact');
             this.attr('title', record.name);
             $('<span />', { 'class': 'icon ' + record.icon }).appendTo(this);
-            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.name);
             $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
             this.click(function() {
             	createRelation(record);

@@ -1,6 +1,4 @@
 class ReUseCaseStep < ActiveRecord::Base
-  unloadable
-  
   belongs_to :re_use_case
 
   has_many :re_use_case_step_expansions, -> { order(:position) }, :dependent => :destroy

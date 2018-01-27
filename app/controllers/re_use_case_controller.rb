@@ -1,5 +1,4 @@
 class ReUseCaseController < RedmineReController
-  unloadable
   menu_item :re
 
   # The new and edit functions will be called via the RedmineReController.

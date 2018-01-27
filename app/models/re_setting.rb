@@ -1,6 +1,4 @@
 class ReSetting < ActiveRecord::Base
-  unloadable
-
   belongs_to :project
   #validates_uniqueness_of :name, :scope => :project_id
   validates :name , :uniqueness => { :scope => :project_id}

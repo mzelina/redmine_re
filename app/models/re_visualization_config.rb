@@ -1,7 +1,4 @@
 class ReVisualizationConfig < ActiveRecord::Base
-  unloadable
- 
-  
    def self.save_visualization_config (project_id, artifact_array, relation_array, visualization_type)
       ReVisualizationConfig.destroy_all(:project_id => project_id, :user_id => User.current.id, :visualization_type => visualization_type)
 

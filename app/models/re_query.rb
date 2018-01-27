@@ -753,7 +753,6 @@ end
 #############
 
 class ReQuery < ActiveRecord::Base
-  unloadable
 
   VISIBILITY = {
     :public => 'is_public',

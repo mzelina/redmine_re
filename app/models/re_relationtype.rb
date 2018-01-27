@@ -1,6 +1,4 @@
 class ReRelationtype < ActiveRecord::Base
-  unloadable
-  
   #validates :id, :presence => true, :numericality => true
   #validates :project_id, :presence => true, :numericality => true
   #validates :relation_type, :presence => true

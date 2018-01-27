@@ -1,6 +1,4 @@
 class ReArtifactProperties < ActiveRecord::Base
-  unloadable
-
   #attr_accessible :artifact_type
 
   scope :without_projects, -> { where("artifact_type != ?", 'Project') }
