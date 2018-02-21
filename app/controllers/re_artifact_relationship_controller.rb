@@ -110,7 +110,7 @@ class ReArtifactRelationshipController < RedmineReController
       when "sunburst"
         min_dis_artifact(session[:visualization_artifakt_id].to_i)
         rootnode['name'] = @re_artifact_properties.name
-        re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artifakt_id])
+        re_artifact_properties = ReArtifactProperties.where('project_id=? and id=?', @project.id, session[:visualization_artifakt_id])
         
         children= sunburst(re_artifact_properties)
         rootnode['children'] = children

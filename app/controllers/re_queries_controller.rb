@@ -13,7 +13,7 @@ class ReQueriesController < RedmineReController
     initialize_tree_data
     logger.warn @query.conditions
     if @query.set_by_params?
-      @found_artifacts = ReArtifactProperties.where(*(@query.conditions).order(@query.order_string)
+      @found_artifacts = ReArtifactProperties.where(*(@query.conditions)).order(@query.order_string)
     else
       @found_artifacts = []
     end
@@ -27,7 +27,7 @@ class ReQueriesController < RedmineReController
     load_cropped_collections
 
     logger.warn @query.conditions
-    @found_artifacts = ReArtifactProperties.where(*(@query.conditions).order(@query.order_string)
+    @found_artifacts = ReArtifactProperties.where(*(@query.conditions)).order(@query.order_string)
   end
 
   def apply
